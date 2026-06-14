@@ -73,7 +73,7 @@ export default function Home() {
       </div>
 
       {/* Bottom nav — 390×82 */}
-      <div className="absolute bottom-0 left-0 z-10 h-[82px] w-[390px] bg-black">
+      <div className="absolute inset-x-0 bottom-0 z-10 h-[82px] bg-black">
         <div className="flex h-[69px] items-center justify-between px-[12.5px]">
           <NavItem icon={<HomeIcon />} label="Home" active />
           <NavItem icon={<FriendsIcon />} label="Friends" />

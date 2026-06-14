@@ -54,6 +54,15 @@ export async function attachStreamToVideo(
   video: HTMLVideoElement,
   stream: MediaStream,
 ) {
-  video.srcObject = stream;
+  if (video.srcObject !== stream) {
+    video.srcObject = stream;
+  }
   await video.play();
+}
+
+export function bindStreamToVideo(video: HTMLVideoElement, stream: MediaStream) {
+  if (video.srcObject !== stream) {
+    video.srcObject = stream;
+  }
+  void video.play().catch(() => {});
 }

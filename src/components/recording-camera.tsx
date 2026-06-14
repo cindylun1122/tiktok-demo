@@ -4,8 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   acquireCameraStream,
   attachStreamToVideo,
+  bindStreamToVideo,
   getActiveCameraStream,
-  releaseCameraStream,
 } from "@/src/lib/camera-stream";
 import {
   createClipRecorder,
@@ -33,7 +33,7 @@ export function RecordingCamera({
     const stream = getActiveCameraStream();
     const video = videoRef.current;
     if (stream && video) {
-      void attachStreamToVideo(video, stream);
+      bindStreamToVideo(video, stream);
     }
   }, []);
 
@@ -68,8 +68,6 @@ export function RecordingCamera({
         recorder.onstop = () => {
           if (finished) return;
           finished = true;
-
-          releaseCameraStream();
 
           if (stopReason !== "timer") return;
 
@@ -113,7 +111,7 @@ export function RecordingCamera({
 
   if (error) {
     return (
-      <div className="absolute inset-0 z-0 flex items-center justify-center bg-[#2d2d2d] px-6 text-center">
+      <div className="absolute inset-0 z-0 flex items-center justify-center bg-black px-6 text-center">
         <p className="text-[13px] font-medium text-white/55">{error}</p>
       </div>
     );

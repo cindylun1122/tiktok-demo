@@ -1,17 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { getClipRecordingUrl } from "@/src/lib/clip-recordings";
 
 export function ClipRecordingPlayback({ clip }: { clip: number }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [url, setUrl] = useState<string | null>(null);
+  const [url] = useState(() => getClipRecordingUrl(clip));
 
-  useEffect(() => {
-    setUrl(getClipRecordingUrl(clip));
-  }, [clip]);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     const video = videoRef.current;
     if (!video || !url) return;
 
@@ -24,15 +20,13 @@ export function ClipRecordingPlayback({ clip }: { clip: number }) {
     });
   }, [url]);
 
-  if (!url) return null;
-
   return (
     <video
       ref={videoRef}
       autoPlay
       loop
       playsInline
-      className="absolute inset-0 z-0 h-full w-full object-cover"
+      className="absolute inset-0 z-0 h-full w-full bg-black object-cover"
       aria-hidden
     />
   );

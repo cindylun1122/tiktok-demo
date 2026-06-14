@@ -43,7 +43,7 @@ function BatteryIcon() {
 
 export function StatusBar() {
   return (
-    <div className="relative z-20 flex h-[54px] items-end justify-between px-[14px] pb-[8px] text-[15px] font-semibold leading-none text-white">
+    <div className="status-bar relative z-20 flex h-[54px] items-end justify-between px-[14px] pb-[8px] text-[15px] font-semibold leading-none text-white">
       <span>9:41</span>
       <div className="flex items-center gap-[5px]">
         <SignalIcon />
