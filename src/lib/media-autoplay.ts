@@ -2,7 +2,7 @@ type UnlockListener = () => void;
 
 const FRAME_WIDTH = 390;
 const FRAME_HEIGHT = 844;
-const DESKTOP_VIEWPORT_FILL = 0.8;
+const DESKTOP_VIEWPORT_FILL = 0.95;
 const MOBILE_BREAKPOINT = 768;
 
 let unlocked = false;
