@@ -8,7 +8,9 @@ function notifyListeners() {
 
 export function subscribeClipRecordings(listener: () => void) {
   listeners.add(listener);
-  return () => listeners.delete(listener);
+  return () => {
+    listeners.delete(listener);
+  };
 }
 
 export function saveClipRecording(clip: number, blob: Blob) {
