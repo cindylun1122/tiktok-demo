@@ -9,7 +9,7 @@ export default function TemplateCompletePage() {
       activeClip={4}
       duration={recordingDuration}
       recordingHref={getClipRecordingHref(4)}
-      allComplete
+      returnFrom="complete"
     />
   );
 }

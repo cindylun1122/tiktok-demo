@@ -1,22 +1,37 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { PhoneFrame } from "@/src/components/phone-frame";
 import { StatusBar } from "@/src/components/status-bar";
+import { subscribeClipRecordings } from "@/src/lib/clip-recordings";
+import {
+  getReviewConfirmHref,
+  getReviewBackHref,
+  getReviewRecordAgainHref,
+} from "@/src/lib/review-navigation";
 
 type ClipReviewScreenProps = {
   clip: number;
   title: string;
-  backHref: string;
-  recordAgainHref: string;
-  confirmHref: string;
+  defaultBackHref: string;
+  from?: string;
 };
 
 export function ClipReviewScreen({
   clip,
   title,
-  backHref,
-  recordAgainHref,
-  confirmHref,
+  defaultBackHref,
+  from,
 }: ClipReviewScreenProps) {
+  const [, setRevision] = useState(0);
+
+  useEffect(() => subscribeClipRecordings(() => setRevision((value) => value + 1)), []);
+
+  const backHref = getReviewBackHref(from, defaultBackHref);
+  const recordAgainHref = getReviewRecordAgainHref(clip, from);
+  const confirmHref = getReviewConfirmHref(from, clip);
+
   return (
     <PhoneFrame
       variant="inset"

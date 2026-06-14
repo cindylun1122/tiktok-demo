@@ -3,6 +3,7 @@ import {
   getClipReviewHref,
   getClipStageHref,
 } from "@/src/lib/structure-clips";
+import { areAllClipsRecorded } from "@/src/lib/clip-recordings";
 
 export function getReviewBackHref(from: string | undefined, defaultHref: string) {
   if (from === "complete") return "/template/complete";
@@ -13,10 +14,12 @@ export function getReviewBackHref(from: string | undefined, defaultHref: string)
   return defaultHref;
 }
 
+/** Client-side: depends on in-memory clip recordings. */
 export function getReviewConfirmHref(from: string | undefined, clip: number) {
   if (from === "complete") return "/template/complete";
-  if (clip >= 4) return "/template/complete";
-  return `/template/clip-${clip + 1}`;
+  if (clip < 4) return getClipStageHref(clip + 1);
+  if (areAllClipsRecorded()) return "/template/complete";
+  return getClipStageHref(4);
 }
 
 function appendFromParam(href: string, from?: string) {

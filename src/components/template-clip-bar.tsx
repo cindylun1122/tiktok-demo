@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
+  areAllClipsRecorded,
   getClipRecordingUrl,
   getClipThumbnailUrl,
   subscribeClipRecordings,
@@ -13,7 +14,6 @@ import { getClipStageHrefWithFrom } from "@/src/lib/review-navigation";
 
 type TemplateClipBarProps = {
   activeClip?: number;
-  allComplete?: boolean;
   reRecordingFromComplete?: boolean;
   returnFrom?: string;
 };
@@ -22,35 +22,28 @@ function getClipDurationLabel(clipNumber: number) {
   return `${getStructureClip(clipNumber).recordingDuration}s`;
 }
 
+function isClipCompleted(clipNumber: number) {
+  return getClipRecordingUrl(clipNumber) !== null;
+}
+
 function getCompletedReviewHref(
   clipNumber: number,
   activeClip: number,
-  allComplete?: boolean,
+  allRecorded: boolean,
   reRecordingFromComplete?: boolean,
 ) {
-  if (allComplete || reRecordingFromComplete) {
-    if (clipNumber === activeClip && reRecordingFromComplete) return undefined;
+  if (!isClipCompleted(clipNumber)) return undefined;
+
+  if (reRecordingFromComplete) {
+    if (clipNumber === activeClip) return undefined;
     return `${getClipReviewHref(clipNumber)}?from=complete`;
   }
-  if (!getClipRecordingUrl(clipNumber)) return undefined;
-  return `${getClipReviewHref(clipNumber)}?from=clip-${activeClip}`;
-}
 
-function isClipCompleted(
-  clipNumber: number,
-  activeClip: number,
-  allComplete?: boolean,
-  reRecordingFromComplete?: boolean,
-) {
-  if (allComplete) return true;
-  if (
-    reRecordingFromComplete &&
-    clipNumber !== activeClip &&
-    clipNumber <= 4
-  ) {
-    return true;
+  if (allRecorded) {
+    return `${getClipReviewHref(clipNumber)}?from=complete`;
   }
-  return getClipRecordingUrl(clipNumber) !== null;
+
+  return `${getClipReviewHref(clipNumber)}?from=clip-${activeClip}`;
 }
 
 function getClipCardClassName(isActive: boolean) {
@@ -66,11 +59,11 @@ function getClipCardClassName(isActive: boolean) {
 
 export function TemplateClipBar({
   activeClip = 1,
-  allComplete = false,
   reRecordingFromComplete = false,
   returnFrom,
 }: TemplateClipBarProps) {
   const [, setRevision] = useState(0);
+  const allRecorded = areAllClipsRecorded();
 
   useEffect(() => subscribeClipRecordings(() => setRevision((value) => value + 1)), []);
 
@@ -89,17 +82,12 @@ export function TemplateClipBar({
         <div className="ml-2 h-6 w-px shrink-0 bg-white/35" />
         <div className="ml-6 flex shrink-0 items-center gap-4">
           {[1, 2, 3, 4].map((clipNumber) => {
-            const isCompleted = isClipCompleted(
-              clipNumber,
-              activeClip,
-              allComplete,
-              reRecordingFromComplete,
-            );
-            const isActive = !allComplete && clipNumber === activeClip;
+            const isCompleted = isClipCompleted(clipNumber);
+            const isActive = !allRecorded && clipNumber === activeClip;
             const reviewHref = getCompletedReviewHref(
               clipNumber,
               activeClip,
-              allComplete,
+              allRecorded,
               reRecordingFromComplete,
             );
 

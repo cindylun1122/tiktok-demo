@@ -1,9 +1,4 @@
 import { ClipReviewScreen } from "@/src/components/clip-review-screen";
-import {
-  getReviewBackHref,
-  getReviewConfirmHref,
-  getReviewRecordAgainHref,
-} from "@/src/lib/review-navigation";
 
 type ClipReviewPageProps = {
   searchParams: Promise<{ from?: string }>;
@@ -18,9 +13,8 @@ export default async function Clip4ReviewPage({
     <ClipReviewScreen
       clip={4}
       title="Clip 4"
-      backHref={getReviewBackHref(from, "/template/clip-4")}
-      recordAgainHref={getReviewRecordAgainHref(4, from)}
-      confirmHref={getReviewConfirmHref(from, 4)}
+      defaultBackHref="/template/clip-4"
+      from={from}
     />
   );
 }

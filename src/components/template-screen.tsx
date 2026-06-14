@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PhoneFrame } from "@/src/components/phone-frame";
 import { ScriptPromptSection } from "@/src/components/script-prompt-section";
 import { StatusBar } from "@/src/components/status-bar";
 import { TemplateClipBar } from "@/src/components/template-clip-bar";
-
+import {
+  areAllClipsRecorded,
+  subscribeClipRecordings,
+} from "@/src/lib/clip-recordings";
 import {
   getClipRecordingHref,
   getStructureClip,
@@ -21,7 +24,6 @@ type TemplateScreenProps = {
   activeClip: number;
   duration?: number;
   recordingHref?: string;
-  allComplete?: boolean;
   returnFrom?: string;
 };
 
@@ -29,7 +31,6 @@ export function TemplateScreen({
   activeClip,
   duration = getStructureClip(activeClip).recordingDuration,
   recordingHref,
-  allComplete = false,
   returnFrom,
 }: TemplateScreenProps) {
   const resolvedRecordingHref =
@@ -37,6 +38,10 @@ export function TemplateScreen({
   const reRecordingFromComplete = isReRecordingFromComplete(returnFrom);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [assistantOn, setAssistantOn] = useState(true);
+  const [, setRevision] = useState(0);
+  const allRecorded = areAllClipsRecorded();
+
+  useEffect(() => subscribeClipRecordings(() => setRevision((value) => value + 1)), []);
 
   const toggleAssistant = () => {
     setAssistantOn((on) => {
@@ -54,7 +59,6 @@ export function TemplateScreen({
       bottom={
         <TemplateClipBar
           activeClip={activeClip}
-          allComplete={allComplete}
           reRecordingFromComplete={reRecordingFromComplete}
           returnFrom={returnFrom}
         />
@@ -142,7 +146,7 @@ export function TemplateScreen({
         >
           <div className="h-[64px] w-[64px] rounded-full bg-[#fe2c55]" />
         </Link>
-        {allComplete && (
+        {allRecorded && (
           <Link
             href="/template/post"
             className="absolute right-[56px] flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[#fe2c55]"

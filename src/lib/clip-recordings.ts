@@ -41,6 +41,14 @@ export function getClipRecordingUrl(clip: number) {
   return recordings.get(clip) ?? null;
 }
 
+export function isClipRecorded(clip: number) {
+  return recordings.has(clip);
+}
+
+export function areAllClipsRecorded(clips = [1, 2, 3, 4]) {
+  return clips.every((clip) => recordings.has(clip));
+}
+
 export function getClipThumbnailUrl(clip: number) {
   return thumbnails.get(clip) ?? null;
 }
