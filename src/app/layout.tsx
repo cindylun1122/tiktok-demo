@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { MediaAutoplayUnlock } from "@/src/components/media-autoplay-unlock";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <MediaAutoplayUnlock />
+        {children}
+      </body>
     </html>
   );
 }

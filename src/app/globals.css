@@ -25,7 +25,10 @@ body {
 }
 
 .phone-frame-scale-host {
-  --frame-scale: min(1, calc((100dvh - 32px) / 844), calc((100vw - 32px) / 390));
+  --frame-scale: min(
+    calc((100dvh * 0.8) / 844),
+    calc((100vw * 0.8) / 390)
+  );
   width: calc(390px * var(--frame-scale));
   height: calc(844px * var(--frame-scale));
   flex-shrink: 0;

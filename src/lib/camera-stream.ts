@@ -1,3 +1,5 @@
+import { unlockMediaAutoplay } from "@/src/lib/media-autoplay";
+
 let sharedStream: MediaStream | null = null;
 let acquirePromise: Promise<MediaStream> | null = null;
 
@@ -33,6 +35,7 @@ export async function acquireCameraStream() {
       .then((stream) => {
         sharedStream = stream;
         acquirePromise = null;
+        unlockMediaAutoplay();
         return stream;
       })
       .catch((error) => {
