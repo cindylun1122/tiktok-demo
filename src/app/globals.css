@@ -25,21 +25,10 @@ body {
 }
 
 .phone-frame-scale-host {
-  --frame-scale: min(
-    calc((100dvh * 0.8) / 844),
-    calc((100vw * 0.8) / 390)
-  );
-  width: calc(390px * var(--frame-scale));
-  height: calc(844px * var(--frame-scale));
   flex-shrink: 0;
 }
 
-.phone-frame-inner {
-  width: 390px;
-  height: 844px;
-  transform: scale(var(--frame-scale));
-  transform-origin: top left;
-}
+/* Desktop dimensions/transform are set inline by PhoneFrame */
 
 /* Mobile: native full-screen app */
 @media (max-width: 768px) {
